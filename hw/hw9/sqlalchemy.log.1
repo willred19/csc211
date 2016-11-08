@@ -1,0 +1,83 @@
+# IPython log file
+
+# Tue, 08 Nov 2016 17:19:35
+import sqlalchemy 
+# Tue, 08 Nov 2016 17:20:20
+sqlalchemy.__version__
+#[Out]# '0.9.4'
+# Tue, 08 Nov 2016 17:21:48
+from sqlalchemy import create_engine
+# Tue, 08 Nov 2016 17:22:32
+engine = create_engine('sqlite:///:memory:', echo=True)
+# Tue, 08 Nov 2016 17:29:37
+from sqlalchemy.ext.declarative import declarative_base
+# Tue, 08 Nov 2016 17:29:52
+Base = declarative_base()
+# Tue, 08 Nov 2016 17:30:35
+Base
+#[Out]# sqlalchemy.ext.declarative.api.Base
+# Tue, 08 Nov 2016 17:32:05
+from sqlalchemy import Column, Integer, String 
+# Tue, 08 Nov 2016 17:33:32
+class User(Base):
+    __tablename__ = 'users'
+    
+# Tue, 08 Nov 2016 17:39:36
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    fullname = Column(String)
+    password = Column(String)
+    def __repr__(self):
+        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        self.name, self.fullname, self.password)
+    
+# Tue, 08 Nov 2016 17:42:29
+class MyUser(Base):
+    __tablename__ = 'myusers'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    fullname = Column(String)
+    password = Column(String)
+    def __repr__(self):
+        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        self.name, self.fullname, self.password)
+    
+# Tue, 08 Nov 2016 17:42:56
+class MyUsers(Base):
+    __tablename__ = 'myusers'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    fullname = Column(String)
+    password = Column(String)
+    def __repr__(self):
+        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        self.name, self.fullname, self.password)
+    
+# Tue, 08 Nov 2016 17:44:13
+class MyUser(Base):
+    __tablename__ = 'myuser'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    fullname = Column(String)
+    password = Column(String)
+    def __repr__(self):
+        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        self.name, self.fullname, self.password)
+    
+# Tue, 08 Nov 2016 17:44:45
+class MyUsers(Base):
+    __tablename__ = 'myusers'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    fullname = Column(String)
+    password = Column(String)
+    def __repr__(self):
+        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        self.name, self.fullname, self.password)
+    
+# Tue, 08 Nov 2016 17:45:09
+User.__table__
+# Tue, 08 Nov 2016 17:50:58
+MyUsers.
