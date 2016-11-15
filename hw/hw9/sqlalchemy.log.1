@@ -1,83 +1,187 @@
 # IPython log file
 
-# Tue, 08 Nov 2016 17:19:35
-import sqlalchemy 
-# Tue, 08 Nov 2016 17:20:20
+# Tue, 15 Nov 2016 00:25:26
+import sqlalchemy
+# Tue, 15 Nov 2016 00:25:39
 sqlalchemy.__version__
-#[Out]# '0.9.4'
-# Tue, 08 Nov 2016 17:21:48
+#[Out]# '1.0.12'
+# Tue, 15 Nov 2016 00:26:03
 from sqlalchemy import create_engine
-# Tue, 08 Nov 2016 17:22:32
+# Tue, 15 Nov 2016 00:27:11
 engine = create_engine('sqlite:///:memory:', echo=True)
-# Tue, 08 Nov 2016 17:29:37
+# Tue, 15 Nov 2016 00:27:52
 from sqlalchemy.ext.declarative import declarative_base
-# Tue, 08 Nov 2016 17:29:52
+# Tue, 15 Nov 2016 00:28:15
 Base = declarative_base()
-# Tue, 08 Nov 2016 17:30:35
-Base
-#[Out]# sqlalchemy.ext.declarative.api.Base
-# Tue, 08 Nov 2016 17:32:05
-from sqlalchemy import Column, Integer, String 
-# Tue, 08 Nov 2016 17:33:32
-class User(Base):
-    __tablename__ = 'users'
-    
-# Tue, 08 Nov 2016 17:39:36
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    fullname = Column(String)
-    password = Column(String)
-    def __repr__(self):
-        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
-        self.name, self.fullname, self.password)
-    
-# Tue, 08 Nov 2016 17:42:29
-class MyUser(Base):
-    __tablename__ = 'myusers'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    fullname = Column(String)
-    password = Column(String)
-    def __repr__(self):
-        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
-        self.name, self.fullname, self.password)
-    
-# Tue, 08 Nov 2016 17:42:56
+# Tue, 15 Nov 2016 00:28:59
+from sqlalchemy import Column, Integer, String
+# Tue, 15 Nov 2016 00:32:23
 class MyUsers(Base):
-    __tablename__ = 'myusers'
+    __tablename__ = 'my_users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     fullname = Column(String)
-    password = Column(String)
+    password = COlumn(String)
     def __repr__(self):
-        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        return "<MyUsers(name='%s', fullname='%s', password='%s')>" % (
         self.name, self.fullname, self.password)
     
-# Tue, 08 Nov 2016 17:44:13
-class MyUser(Base):
-    __tablename__ = 'myuser'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    fullname = Column(String)
-    password = Column(String)
-    def __repr__(self):
-        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
-        self.name, self.fullname, self.password)
-    
-# Tue, 08 Nov 2016 17:44:45
+# Tue, 15 Nov 2016 00:32:46
 class MyUsers(Base):
-    __tablename__ = 'myusers'
+    __tablename__ = 'my_users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     fullname = Column(String)
     password = Column(String)
     def __repr__(self):
-        return "<User(name='%s', fullname='%s', passwords='%s')>" % (
+        return "<MyUsers(name='%s', fullname='%s', password='%s')>" % (
         self.name, self.fullname, self.password)
     
-# Tue, 08 Nov 2016 17:45:09
-User.__table__
-# Tue, 08 Nov 2016 17:50:58
-MyUsers.
+# Tue, 15 Nov 2016 00:33:25
+MyUsers.__table__
+#[Out]# Table('my_users', MetaData(bind=None), Column('id', Integer(), table=<my_users>, primary_key=True, nullable=False), Column('name', String(), table=<my_users>), Column('fullname', String(), table=<my_users>), Column('password', String(), table=<my_users>), schema=None)
+# Tue, 15 Nov 2016 00:33:44
+Base.metadata.create_all(engine)
+# Tue, 15 Nov 2016 00:35:07
+ed_user = MyUsers(name='ed', fullname='Ed Jones', password='edspassword')
+# Tue, 15 Nov 2016 00:35:15
+ed_user.name
+#[Out]# 'ed'
+# Tue, 15 Nov 2016 00:35:23
+ed_user.password
+#[Out]# 'edspassword'
+# Tue, 15 Nov 2016 00:35:38
+str(ed_user.id)
+#[Out]# 'None'
+# Tue, 15 Nov 2016 00:36:18
+from sqlalchemy.orm import sessionmaker
+# Tue, 15 Nov 2016 00:37:11
+Session = sessionmaker(bind=engine)
+# Tue, 15 Nov 2016 00:38:32
+Session = sessionmaker()
+# Tue, 15 Nov 2016 00:40:35
+Session.configure(bind=engine)
+# Tue, 15 Nov 2016 00:41:18
+session = Session()
+# Tue, 15 Nov 2016 00:42:19
+ed_user = MyUsers(name='ed', fullname='Ed Jones', password='edspassword')
+# Tue, 15 Nov 2016 00:42:43
+session.add(ed_user)
+# Tue, 15 Nov 2016 00:45:24
+our_user = session.query(MyUsers).filter_by(name='ed').first()
+# Tue, 15 Nov 2016 00:45:35
+our_user
+#[Out]# <MyUsers(name='ed', fullname='Ed Jones', password='edspassword')>
+# Tue, 15 Nov 2016 00:45:53
+ed_user is our_user
+#[Out]# True
+# Tue, 15 Nov 2016 00:55:37
+session.add_all([
+MyUsers(name='wendy', fullname='Wendy Wiliams', password='foobar'),
+MyUsers(name='mary', fullname='Mary Contrary', password='xxg527'),
+MyUsers(name='fred', fullname='Fred Flinstone', password='blah')])
+# Tue, 15 Nov 2016 00:55:55
+ed_user.password = 'f8s7ccs'
+# Tue, 15 Nov 2016 00:56:08
+session.dirty
+#[Out]# IdentitySet([<MyUsers(name='ed', fullname='Ed Jones', password='f8s7ccs')>])
+# Tue, 15 Nov 2016 00:57:23
+session.new
+#[Out]# IdentitySet([<MyUsers(name='wendy', fullname='Wendy Wiliams', password='foobar')>, <MyUsers(name='fred', fullname='Fred Flinstone', password='blah')>, <MyUsers(name='mary', fullname='Mary Contrary', password='xxg527')>])
+# Tue, 15 Nov 2016 00:58:48
+session.commit()
+# Tue, 15 Nov 2016 00:59:21
+ed_user.id
+#[Out]# 1
+# Tue, 15 Nov 2016 01:00:16
+ed_user.name = 'Edwardo'
+# Tue, 15 Nov 2016 01:02:12
+fake_user = MyUsers(name='fakeuser', fullname='Invalid', password='12345')
+# Tue, 15 Nov 2016 01:03:02
+session.add(fake_user)
+# Tue, 15 Nov 2016 01:04:20
+session.query(MyUsers).filter(MyUsers.name.in_(['Edwardo', 'fakeuser'])).all()
+#[Out]# [<MyUsers(name='Edwardo', fullname='Ed Jones', password='f8s7ccs')>,
+#[Out]#  <MyUsers(name='fakeuser', fullname='Invalid', password='12345')>]
+# Tue, 15 Nov 2016 01:05:24
+session.rollback()
+# Tue, 15 Nov 2016 01:06:19
+ed_user.name
+#[Out]# 'ed'
+# Tue, 15 Nov 2016 01:06:33
+fake_user in session
+#[Out]# False
+# Tue, 15 Nov 2016 01:11:32
+session.query(MyUsers).filter(MyUsers.name.in_(['ed', 'fakeuser'])).all()
+#[Out]# [<MyUsers(name='ed', fullname='Ed Jones', password='f8s7ccs')>]
+# Tue, 15 Nov 2016 01:16:42
+for instance in session.query(MyUsers).order_by(MyUsers.id):
+    print(instance.name, instance.fullname)
+    
+# Tue, 15 Nov 2016 01:17:53
+for name, in fullname in sesison.qu(MyUsers.name, MyUsers.fullname):
+    print(name, fullname)
+    
+# Tue, 15 Nov 2016 01:18:29
+for name, fullname in sesison.qu(MyUsers.name, MyUsers.fullname):
+    print(name, fullname)
+    
+# Tue, 15 Nov 2016 01:18:47
+for name, fullname in sessison.query(MyUsers.name, MyUsers.fullname):
+    print(name, fullname)
+    
+# Tue, 15 Nov 2016 01:18:58
+for name, fullname in session.query(MyUsers.name, MyUsers.fullname):
+    print(name, fullname)
+    
+# Tue, 15 Nov 2016 01:23:57
+for row in session.query(MyUsers, MyUsers.name).all():
+    print(row.MyUsers, row.name)
+    
+# Tue, 15 Nov 2016 01:27:05
+for row in session.query(MyUsers.name.label('name_label')).all():
+    print(row.name_label)
+    
+# Tue, 15 Nov 2016 01:27:48
+from sqlalchemy.orm import aliased
+# Tue, 15 Nov 2016 01:31:37
+my_users_alias = aliased(MyUsers, name='my_users_alias')
+# Tue, 15 Nov 2016 01:33:09
+for row in session.query(my_users_alias, my_users_alias.name).all():
+    print(row.my_users_alias)
+    
+# Tue, 15 Nov 2016 01:34:08
+for u in session.query(MyUsers).order_by(MyUsers.id)[1:3]:
+    print(u)
+    
+# Tue, 15 Nov 2016 01:35:34
+for name, in session.query(MyUsers.name).filter_by(fullname='Ed Jones'):
+    print(name)
+    
+# Tue, 15 Nov 2016 01:36:25
+for name, in session.query(MyUsers.name).filter(MyUsers.fullname=='Ed Jones'):
+    print(name)
+    
+# Tue, 15 Nov 2016 01:38:49
+for my_users in session.query(MyUsers).filter(MyUsers.name=='ed').filter(MyUsers.fullname=='Ed Jones'):
+    print(my_users)
+    
+# Tue, 15 Nov 2016 01:42:44
+from sqlalchemy import ForeignKey
+# Tue, 15 Nov 2016 01:42:59
+from sqlalchemy.orm import relationship
+# Tue, 15 Nov 2016 01:56:55
+class Address(Base):
+    __tablename__ = 'addresses'
+    id = Column(Integer, primary_key=True)
+    email_address = Column(String, nullable=False)
+    my_users_id = Column(Integer, ForeignKey('my_users.id'))
+    my_users = relationship("MyUsers", back_populates="addresses")
+    def __repr__(self):
+        return "<Address(email_address='%s')>" % self.email_address
+    
+# Tue, 15 Nov 2016 01:58:21
+MyUsers.addresses = relationship(
+"Address", order_by=Address.id, back_populates="my_users")
+# Tue, 15 Nov 2016 02:00:41
+jack = MyUsers(name='
